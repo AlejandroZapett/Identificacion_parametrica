@@ -4,6 +4,7 @@ clear all;
 close all;
 
 data = load('Prueba1_datos.mat');
+fs = 1;
 
 %% Carga de Prueba 2
 clc;
@@ -11,6 +12,7 @@ clear all;
 close all;
 
 data = load('Prueba2_datos.mat');
+fs = 1e3;
 
 %% Identificación paramétrica
 
@@ -29,7 +31,11 @@ V = data.V;
 [m,n] = size(t);
 Z = zeros(m,1);
 
-Tp = [Tl_p;Tt_p];
+% Filtrado de la señal
+fc = 10; %Hz
+[Tl,Tt,Tl_p,Tt_p,Ta,qp] = filtro_de_mediciones(t,Tl,Tt,Tl_p,Tt_p,Ta,qp,fc,fs);
+
+Tp = [Tl_p,Tt_p];
 
 Tm=(Tl+Tt)./2;
 p = [V,-(qp.*(Tl-Tt)),-(Tm-Ta),Z,Z;
